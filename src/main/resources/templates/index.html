@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head lang="en">
     <title>Home Library</title>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
@@ -7,6 +7,12 @@
 <body>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div sec:authorize="isAuthenticated()">
+        The user is authenticated
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        The user is not authenticated
+    </div>
 </div>
 </body>
 </html>
