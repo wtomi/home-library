@@ -1,5 +1,6 @@
 package wojtowicz.tomi.booklibrary.services;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ public class UserServiceJPA implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    //TODO encryption service
+    @Autowired
+    private EncryptionService encryptionService;
 
     @Override
     public List<?> listAll() {
@@ -36,7 +38,9 @@ public class UserServiceJPA implements UserService {
 
     @Override
     public User SaveOrUpdate(User domainObject) {
-        //TODO encryption
+        if(domainObject.getPassword() != null) {
+            domainObject.setEncryptedPassword(encryptionService.encryptString(domainObject.getPassword()));
+        }
         return userRepository.save(domainObject);
     }
 

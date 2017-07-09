@@ -2,10 +2,12 @@ package wojtowicz.tomi.booklibrary.services;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by tommy on 7/9/2017.
  */
+@Service
 public class EncryptionServiceImpl implements EncryptionService{
 
     @Autowired
