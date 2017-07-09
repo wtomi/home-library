@@ -18,11 +18,19 @@ import java.util.List;
 @Profile("springdatajpa")
 public class UserServiceJPA implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     private EncryptionService encryptionService;
+
+    @Autowired
+    public void setEncryptionService(EncryptionService encryptionService) {
+        this.encryptionService = encryptionService;
+    }
 
     @Override
     public List<?> listAll() {

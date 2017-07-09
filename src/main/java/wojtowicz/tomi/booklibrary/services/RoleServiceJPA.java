@@ -16,8 +16,12 @@ import java.util.List;
 @Profile("springdatajpa")
 public class RoleServiceJPA implements RoleService{
 
-    @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public List<?> listAll() {

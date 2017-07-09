@@ -16,12 +16,20 @@ import wojtowicz.tomi.booklibrary.services.UserService;
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
     private UserService userService;
 
     @Autowired
-    @Qualifier("userToUserDetails")
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     private Converter<User, UserDetails> userToUserDetailsConverter;
+
+    @Autowired
+    @Qualifier("userToUserDetails")
+    public void setUserToUserDetailsConverter(Converter<User, UserDetails> converter) {
+        userToUserDetailsConverter = converter;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {

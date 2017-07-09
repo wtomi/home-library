@@ -11,8 +11,12 @@ import wojtowicz.tomi.booklibrary.services.security.EncryptionService;
 @Service
 public class EncryptionServiceImpl implements EncryptionService {
 
-    @Autowired
     private StrongPasswordEncryptor strongPasswordEncryptor;
+
+    @Autowired
+    public void setStrongPasswordEncryptor(StrongPasswordEncryptor strongPasswordEncryptor){
+        this.strongPasswordEncryptor = strongPasswordEncryptor;
+    }
 
     @Override
     public String encryptString(String input) {
