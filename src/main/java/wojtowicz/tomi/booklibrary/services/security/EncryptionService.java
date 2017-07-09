@@ -1,4 +1,4 @@
-package wojtowicz.tomi.booklibrary.services;
+package wojtowicz.tomi.booklibrary.services.security;
 
 /**
  * Created by tommy on 7/9/2017.

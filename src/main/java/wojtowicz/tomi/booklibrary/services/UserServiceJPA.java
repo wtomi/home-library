@@ -1,12 +1,12 @@
 package wojtowicz.tomi.booklibrary.services;
 
-import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.repositories.UserRepository;
+import wojtowicz.tomi.booklibrary.services.security.EncryptionService;
 
 import java.util.ArrayList;
 import java.util.List;
