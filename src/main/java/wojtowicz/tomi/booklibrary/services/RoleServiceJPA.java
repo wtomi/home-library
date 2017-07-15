@@ -44,4 +44,9 @@ public class RoleServiceJPA implements RoleService{
     public void delete(Integer id) {
         roleRepository.delete(id);
     }
+
+    @Override
+    public Role getByRole(String role) {
+        return roleRepository.findByRole(role);
+    }
 }
