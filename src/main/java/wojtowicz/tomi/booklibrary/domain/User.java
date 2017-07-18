@@ -19,12 +19,14 @@ public class User extends AbstractDomainClass{
     @Column(unique = true)
     private String username;
 
+    private String email;
+
     @Transient
     private String password;
 
     private String encryptedPassword;
 
-    private Boolean enabled = true;
+    private Boolean enabled = false;
 
     private Integer failedLoginAttempts = 0;
 

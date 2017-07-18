@@ -51,6 +51,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
             User user = new User();
             user.setUsername(username);
             user.setPassword(username);
+            user.setEnabled(true);
             userService.SaveOrUpdate(user);
         }
     }

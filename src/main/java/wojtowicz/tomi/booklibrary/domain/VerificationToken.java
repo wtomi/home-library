@@ -16,6 +16,7 @@ import java.util.Date;
 public class VerificationToken extends AbstractDomainClass{
     private static final int EXPIRY_TIME_IN_MINUTES = 24 * 60;
 
+    @Column(unique = true)
     private String token;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -24,7 +25,7 @@ public class VerificationToken extends AbstractDomainClass{
 
     private Date expiryDate;
 
-    VerificationToken(User user, String token) {
+    public VerificationToken(User user, String token) {
         super();
 
         this.user = user;

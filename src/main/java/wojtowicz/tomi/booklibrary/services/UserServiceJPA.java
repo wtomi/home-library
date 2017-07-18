@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wojtowicz.tomi.booklibrary.converters.UserDtoToUser;
 import wojtowicz.tomi.booklibrary.domain.User;
+import wojtowicz.tomi.booklibrary.domain.VerificationToken;
+import wojtowicz.tomi.booklibrary.dto.UserDto;
 import wojtowicz.tomi.booklibrary.repositories.UserRepository;
 import wojtowicz.tomi.booklibrary.services.security.EncryptionService;
 
@@ -20,16 +23,30 @@ public class UserServiceJPA implements UserService {
 
     private UserRepository userRepository;
 
+    private EncryptionService encryptionService;
+
+    private UserDtoToUser userDtoToUserConverter;
+
+    private VerificationTokenService verificationTokenService;
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    private EncryptionService encryptionService;
-
     @Autowired
     public void setEncryptionService(EncryptionService encryptionService) {
         this.encryptionService = encryptionService;
+    }
+
+    @Autowired
+    public void setUserDtoToUserConverter(UserDtoToUser userDtoToUser) {
+        this.userDtoToUserConverter = userDtoToUser;
+    }
+
+    @Autowired
+    public VerificationTokenService getVerificationTokenService() {
+        return verificationTokenService;
     }
 
     @Override
@@ -46,7 +63,7 @@ public class UserServiceJPA implements UserService {
 
     @Override
     public User SaveOrUpdate(User domainObject) {
-        if(domainObject.getPassword() != null) {
+        if (domainObject.getPassword() != null) {
             domainObject.setEncryptedPassword(encryptionService.encryptString(domainObject.getPassword()));
         }
         return userRepository.save(domainObject);
@@ -61,5 +78,23 @@ public class UserServiceJPA implements UserService {
     @Override
     public User getByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User registerNewUser(final UserDto userDto) {
+        User user = userDtoToUserConverter.convert(userDto);
+        if (user != null)
+            return userRepository.save(user);
+        else
+            return null;
+        //TODO exception
+    }
+
+    @Override
+    public void createVerificationTokenForUser(User user, String token) {
+        VerificationToken verificationToken = new VerificationToken(user, token);
+        verificationTokenService.SaveOrUpdate(verificationToken);
+
+
     }
 }
