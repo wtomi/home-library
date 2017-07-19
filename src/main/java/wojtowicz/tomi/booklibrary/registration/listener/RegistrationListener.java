@@ -1,5 +1,6 @@
 package wojtowicz.tomi.booklibrary.registration.listener;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
@@ -23,6 +24,26 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private JavaMailSender javaMailSender;
 
     private Environment environment;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    @Autowired
+    public void setJavaMailSender(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
+    @Autowired
+    public void setEnvironment(Environment env) {
+        this.environment = env;
+    }
 
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent onRegistrationCompleteEvent) {
