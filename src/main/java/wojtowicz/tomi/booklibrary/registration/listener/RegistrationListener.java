@@ -6,6 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.registration.event.OnRegistrationCompleteEvent;
 import wojtowicz.tomi.booklibrary.services.UserService;
@@ -15,6 +16,7 @@ import java.util.UUID;
 /**
  * Created by tommy on 7/16/2017.
  */
+@Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent>{
 
     private UserService userService;
@@ -64,7 +66,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final String subject = "Registration Confirmation";
         final String confirmationUrl = event.getAppUrl() + "/registrationConfirm.html?token=" + token;
 //        final String message = messageSource.getMessage("message.regSucc", null, event.getLocale());
-        final String message = "Example message";
+        final String message = "Click link below to confirm registration";
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);

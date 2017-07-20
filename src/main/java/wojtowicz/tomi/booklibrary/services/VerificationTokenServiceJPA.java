@@ -1,5 +1,8 @@
 package wojtowicz.tomi.booklibrary.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.repositories.VerificationTokenRepository;
 
@@ -9,10 +12,13 @@ import java.util.List;
 /**
  * Created by tommy on 7/18/2017.
  */
+@Service
+@Profile("springdatajpa")
 public class VerificationTokenServiceJPA implements VerificationTokenService {
 
     private VerificationTokenRepository repository;
 
+    @Autowired
     public void setRepository(VerificationTokenRepository repository) {
         this.repository = repository;
     }

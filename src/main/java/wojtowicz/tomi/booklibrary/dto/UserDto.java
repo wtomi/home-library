@@ -18,7 +18,7 @@ public class UserDto {
 
     @NotNull
     @Size(min = 1)
-    private String name;
+    private String username;
 
     @NotNull
     @Size(min = 1)

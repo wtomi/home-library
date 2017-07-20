@@ -29,9 +29,9 @@ public class UserDtoToUser implements Converter<UserDto, User>{
     public User convert(final UserDto userDto) {
         final User user = new User();
         user.setPassword(userDto.getPassword());
-        user.setUsername(userDto.getName());
+        user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setRoles(Arrays.asList(roleService.getByRole("USER")));
+        user.addRole(roleService.getByRole("USER"));
         return user;
     }
 }

@@ -33,7 +33,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         createAndSaveRoles();
         createAndSaveUsers();
-        linkUsersWithRoles();
+        linkAdminRole();
     }
 
     private void createAndSaveRoles() {
@@ -52,20 +52,9 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
             user.setUsername(username);
             user.setPassword(username);
             user.setEnabled(true);
+            user.addRole(roleService.getByRole("USER"));
             userService.SaveOrUpdate(user);
         }
-    }
-
-    private void linkUsersWithRoles() {
-        linkUserRole();
-        linkAdminRole();
-    }
-
-    private void linkUserRole() {
-        User user = userService.getByUsername("user");
-        Role role = roleService.getByRole("USER");
-        user.addRole(role);
-        userService.SaveOrUpdate(user);
     }
 
     private void linkAdminRole() {

@@ -45,8 +45,8 @@ public class UserServiceJPA implements UserService {
     }
 
     @Autowired
-    public VerificationTokenService getVerificationTokenService() {
-        return verificationTokenService;
+    public void setVerificationTokenService(VerificationTokenService verificationTokenService) {
+        this.verificationTokenService = verificationTokenService;
     }
 
     @Override
@@ -62,11 +62,11 @@ public class UserServiceJPA implements UserService {
     }
 
     @Override
-    public User SaveOrUpdate(User domainObject) {
-        if (domainObject.getPassword() != null) {
-            domainObject.setEncryptedPassword(encryptionService.encryptString(domainObject.getPassword()));
+    public User SaveOrUpdate(User user) {
+        if (user.getPassword() != null) {
+            user.setEncryptedPassword(encryptionService.encryptString(user.getPassword()));
         }
-        return userRepository.save(domainObject);
+        return userRepository.save(user);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class UserServiceJPA implements UserService {
     public User registerNewUser(final UserDto userDto) {
         User user = userDtoToUserConverter.convert(userDto);
         if (user != null)
-            return userRepository.save(user);
+            return this.SaveOrUpdate(user);
         else
             return null;
         //TODO exception
@@ -94,7 +94,5 @@ public class UserServiceJPA implements UserService {
     public void createVerificationTokenForUser(User user, String token) {
         VerificationToken verificationToken = new VerificationToken(user, token);
         verificationTokenService.SaveOrUpdate(verificationToken);
-
-
     }
 }

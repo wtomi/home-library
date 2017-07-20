@@ -1,7 +1,6 @@
 package wojtowicz.tomi.booklibrary.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
 import wojtowicz.tomi.booklibrary.registration.event.OnRegistrationCompleteEvent;
@@ -31,28 +31,28 @@ public class RegistrationController {
 
     private ApplicationEventPublisher applicationEventPublisher;
 
+    private UserService userService;
+
     @Autowired
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
-    private UserService userService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    @RequestMapping(value = "register", method = RequestMethod.GET)
     public String registerPage(Model model) {
         final UserDto userDto = new UserDto();
         model.addAttribute(MODEL_ATTRIBUTE_USER, userDto);
         return VIEW_REGISTER;
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     public String registerPagePost(@ModelAttribute(MODEL_ATTRIBUTE_USER) @Valid final UserDto userDto,
-                                   BindingResult bindingResult, final HttpServletRequest request) {
+                                   BindingResult bindingResult, final HttpServletRequest request, Model model) {
         if (bindingResult.hasErrors()) {
             return VIEW_REGISTER;
         }
@@ -66,5 +66,4 @@ public class RegistrationController {
 
         return VIEW_SUCCESSFUL_REGISTER;
     }
-
 }
