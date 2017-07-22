@@ -2,8 +2,10 @@ package wojtowicz.tomi.booklibrary.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,17 +15,24 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-public class VerificationToken extends AbstractDomainClass{
+public class VerificationToken extends AbstractDomainClass {
     private static final int EXPIRY_TIME_IN_MINUTES = 24 * 60;
 
+    @NotNull
+    @NotEmpty
     @Column(unique = true)
     private String token;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name="user_id")
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
+    @NotNull
     private Date expiryDate;
+
+    public VerificationToken() {
+        super();
+    }
 
     public VerificationToken(User user, String token) {
         super();

@@ -36,7 +36,7 @@ public class RoleServiceJPA implements RoleService{
     }
 
     @Override
-    public Role SaveOrUpdate(Role domainObject) {
+    public Role saveOrUpdate(Role domainObject) {
         return roleRepository.save(domainObject);
     }
 

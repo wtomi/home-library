@@ -1,6 +1,7 @@
 package wojtowicz.tomi.booklibrary.services;
 
 import wojtowicz.tomi.booklibrary.domain.User;
+import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
 
 /**
@@ -12,4 +13,6 @@ public interface UserService extends CRUDService<User>{
     User registerNewUser(UserDto userDto);
 
     void createVerificationTokenForUser(User user, String token);
+
+    VerificationToken getVerificationToken(String token);
 }

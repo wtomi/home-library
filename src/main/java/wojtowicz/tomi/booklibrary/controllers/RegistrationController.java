@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wojtowicz.tomi.booklibrary.domain.User;
+import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
 import wojtowicz.tomi.booklibrary.registration.event.OnRegistrationCompleteEvent;
 import wojtowicz.tomi.booklibrary.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Calendar;
 
 /**
  * Created by tommy on 7/17/2017.
@@ -65,5 +68,44 @@ public class RegistrationController {
         }
 
         return VIEW_SUCCESSFUL_REGISTER;
+    }
+
+
+    @RequestMapping("registrationConfirm")
+    public String confirmRegistration(final HttpServletRequest request, Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
+        VerificationToken verificationToken = userService.getVerificationToken(token);
+        if (tokenIsValid(verificationToken)) {
+            activateUser(verificationToken);
+            redirectAttributes.addFlashAttribute("message", "Your registration has been confirmed successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("expired", true);
+            redirectAttributes.addFlashAttribute("token", verificationToken);
+            redirectAttributes.addFlashAttribute("message", "Sorry, time for verification has expired. You can register again. Remember to confirm registration within 24 hours.");
+            return "redirect:/confirmError";
+        }
+        return "redirect:/confirmSuccess";
+    }
+
+    private void activateUser(VerificationToken verificationToken) {
+        User user = verificationToken.getUser();
+        user.setEnabled(true);
+        userService.saveOrUpdate(user);
+    }
+
+    private boolean tokenIsValid(VerificationToken verificationToken) {
+        if (verificationToken == null)
+            return false;
+        final Calendar cal = Calendar.getInstance();
+        return cal.getTime().getTime() - verificationToken.getExpiryDate().getTime() < 0;
+    }
+
+    @RequestMapping("confirmSuccess")
+    public String confirmSuccess(Model model) {
+        return "confirmSuccess";
+    }
+
+    @RequestMapping("confirmError")
+    public String confirmError(Model model) {
+        return "confirmError";
     }
 }

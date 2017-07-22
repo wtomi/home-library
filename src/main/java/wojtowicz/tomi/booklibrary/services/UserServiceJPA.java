@@ -9,6 +9,7 @@ import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
 import wojtowicz.tomi.booklibrary.repositories.UserRepository;
+import wojtowicz.tomi.booklibrary.repositories.VerificationTokenRepository;
 import wojtowicz.tomi.booklibrary.services.security.EncryptionService;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class UserServiceJPA implements UserService {
 
     private UserDtoToUser userDtoToUserConverter;
 
-    private VerificationTokenService verificationTokenService;
+    private VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -45,8 +46,8 @@ public class UserServiceJPA implements UserService {
     }
 
     @Autowired
-    public void setVerificationTokenService(VerificationTokenService verificationTokenService) {
-        this.verificationTokenService = verificationTokenService;
+    public void setVerificationTokenRepository(VerificationTokenRepository verificationTokenRepository) {
+        this.verificationTokenRepository = verificationTokenRepository;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class UserServiceJPA implements UserService {
     }
 
     @Override
-    public User SaveOrUpdate(User user) {
+    public User saveOrUpdate(User user) {
         if (user.getPassword() != null) {
             user.setEncryptedPassword(encryptionService.encryptString(user.getPassword()));
         }
@@ -84,7 +85,7 @@ public class UserServiceJPA implements UserService {
     public User registerNewUser(final UserDto userDto) {
         User user = userDtoToUserConverter.convert(userDto);
         if (user != null)
-            return this.SaveOrUpdate(user);
+            return this.saveOrUpdate(user);
         else
             return null;
         //TODO exception
@@ -93,6 +94,11 @@ public class UserServiceJPA implements UserService {
     @Override
     public void createVerificationTokenForUser(User user, String token) {
         VerificationToken verificationToken = new VerificationToken(user, token);
-        verificationTokenService.SaveOrUpdate(verificationToken);
+        verificationTokenRepository.save(verificationToken);
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String token) {
+        return verificationTokenRepository.findByToken(token);
     }
 }

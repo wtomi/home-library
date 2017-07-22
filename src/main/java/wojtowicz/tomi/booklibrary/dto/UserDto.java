@@ -2,7 +2,9 @@ package wojtowicz.tomi.booklibrary.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import wojtowicz.tomi.booklibrary.validation.PasswordMatches;
+import wojtowicz.tomi.booklibrary.validation.ValidEmail;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,11 +19,12 @@ import javax.validation.constraints.Size;
 public class UserDto {
 
     @NotNull
-    @Size(min = 1)
+    @NotEmpty
     private String username;
 
     @NotNull
-    @Size(min = 1)
+    @NotEmpty
+    @ValidEmail
     private String email;
 
     //TODO custom validation
@@ -30,6 +33,6 @@ public class UserDto {
     private String password;
 
     @NotNull
-    @Size(min = 1)
+    @NotEmpty
     private String repeatedPassword;
 }

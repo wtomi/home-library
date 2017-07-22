@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * Created by tommy on 7/17/2017.
  */
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EmailValidator.class)
 @Documented

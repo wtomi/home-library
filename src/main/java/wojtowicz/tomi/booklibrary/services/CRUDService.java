@@ -10,7 +10,7 @@ public interface CRUDService<T> {
 
     T getById(Integer id);
 
-    T SaveOrUpdate(T domainObject);
+    T saveOrUpdate(T domainObject);
 
     void delete(Integer id);
 }

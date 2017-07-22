@@ -1,10 +1,11 @@
 package wojtowicz.tomi.booklibrary.domain;
 
-
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +20,21 @@ public class User extends AbstractDomainClass{
     @Column(unique = true)
     private String username;
 
+    @NotEmpty
+    @NotNull
     private String email;
 
     @Transient
     private String password;
 
+    @NotNull
+    @NotEmpty
     private String encryptedPassword;
 
+    @NotNull
     private Boolean enabled = false;
 
+    @NotNull
     private Integer failedLoginAttempts = 0;
 
     @ManyToMany(fetch = FetchType.EAGER)

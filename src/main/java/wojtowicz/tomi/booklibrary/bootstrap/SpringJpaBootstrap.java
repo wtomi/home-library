@@ -41,7 +41,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         for(String roleName: rolesNames) {
             Role role = new Role();
             role.setRole(roleName);
-            roleService.SaveOrUpdate(role);
+            roleService.saveOrUpdate(role);
         }
     }
 
@@ -51,9 +51,10 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
             User user = new User();
             user.setUsername(username);
             user.setPassword(username);
+            user.setEmail(username + "@" + username + "com");
             user.setEnabled(true);
             user.addRole(roleService.getByRole("USER"));
-            userService.SaveOrUpdate(user);
+            userService.saveOrUpdate(user);
         }
     }
 
@@ -61,6 +62,6 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         User user = userService.getByUsername("admin");
         Role role = roleService.getByRole("ADMIN");
         user.addRole(role);
-        userService.SaveOrUpdate(user);
+        userService.saveOrUpdate(user);
     }
 }
