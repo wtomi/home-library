@@ -8,12 +8,14 @@ import wojtowicz.tomi.booklibrary.converters.UserDtoToUser;
 import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
+import wojtowicz.tomi.booklibrary.exceptions.UserAlreadyExistsException;
 import wojtowicz.tomi.booklibrary.repositories.UserRepository;
 import wojtowicz.tomi.booklibrary.repositories.VerificationTokenRepository;
 import wojtowicz.tomi.booklibrary.services.security.EncryptionService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by tommy on 7/9/2017.
@@ -83,18 +85,34 @@ public class UserServiceJPA implements UserService {
 
     @Override
     public User registerNewUser(final UserDto userDto) {
+        if (userAlreadyExists(userDto)) {
+            throw new UserAlreadyExistsException("User already exists");
+        }
         User user = userDtoToUserConverter.convert(userDto);
-        if (user != null)
-            return this.saveOrUpdate(user);
-        else
-            return null;
-        //TODO exception
+        return this.saveOrUpdate(user);
+    }
+
+    private boolean userAlreadyExists(UserDto userDto) {
+        return userRepository.findByUsername(userDto.getUsername()) != null ||
+                userRepository.findByEmail(userDto.getEmail()) != null;
     }
 
     @Override
-    public void createVerificationTokenForUser(User user, String token) {
-        VerificationToken verificationToken = new VerificationToken(user, token);
-        verificationTokenRepository.save(verificationToken);
+    public VerificationToken createVerificationTokenForUser(User user) {
+        VerificationToken verificationToken = createUniqueToken(user);
+        return verificationTokenRepository.save(verificationToken);
+    }
+
+    private VerificationToken createUniqueToken(User user) {
+        boolean isTokenUnique = false;
+        String token = null;
+        while (!isTokenUnique) {
+            token = UUID.randomUUID().toString();
+            if (verificationTokenRepository.findByToken(token) == null) {
+                isTokenUnique = true;
+            }
+        }
+        return new VerificationToken(user, token);
     }
 
     @Override

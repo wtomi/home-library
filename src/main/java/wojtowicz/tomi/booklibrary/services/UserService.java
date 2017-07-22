@@ -12,7 +12,7 @@ public interface UserService extends CRUDService<User>{
 
     User registerNewUser(UserDto userDto);
 
-    void createVerificationTokenForUser(User user, String token);
+    VerificationToken createVerificationTokenForUser(User user);
 
     VerificationToken getVerificationToken(String token);
 }

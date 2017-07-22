@@ -8,10 +8,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import wojtowicz.tomi.booklibrary.domain.User;
+import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.registration.event.OnRegistrationCompleteEvent;
 import wojtowicz.tomi.booklibrary.services.UserService;
-
-import java.util.UUID;
 
 /**
  * Created by tommy on 7/16/2017.
@@ -54,10 +53,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
         final User user = event.getUser();
-        final String token = UUID.randomUUID().toString();
-        userService.createVerificationTokenForUser(user, token);
+        VerificationToken token = userService.createVerificationTokenForUser(user);
 
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
+        final SimpleMailMessage email = constructEmailMessage(event, user, token.getToken());
         javaMailSender.send(email);
     }
 
