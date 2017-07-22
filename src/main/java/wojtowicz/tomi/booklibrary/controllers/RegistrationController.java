@@ -110,7 +110,7 @@ public class RegistrationController {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public String registerError(UserAlreadyExistsException ex, Model model) {
-        model.addAttribute("message", ex.getMessage());
+        model.addAttribute("message", "User with given username or email already exists. Try to sign up with different details :)");
         return "registerError";
     }
 }

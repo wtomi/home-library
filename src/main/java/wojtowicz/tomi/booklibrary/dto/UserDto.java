@@ -29,7 +29,7 @@ public class UserDto {
 
     //TODO custom validation
     @NotNull
-    @Size(min = 1)
+    @NotEmpty
     private String password;
 
     @NotNull
