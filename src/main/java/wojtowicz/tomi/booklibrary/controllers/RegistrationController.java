@@ -1,18 +1,17 @@
 package wojtowicz.tomi.booklibrary.controllers;
 
+import com.sun.javafx.sg.prism.NGShape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
+import wojtowicz.tomi.booklibrary.exceptions.UserAlreadyExistsException;
 import wojtowicz.tomi.booklibrary.registration.event.OnRegistrationCompleteEvent;
 import wojtowicz.tomi.booklibrary.services.UserService;
 
@@ -107,5 +106,11 @@ public class RegistrationController {
     @RequestMapping("confirmError")
     public String confirmError(Model model) {
         return "confirmError";
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public String registerError(UserAlreadyExistsException ex, Model model) {
+        model.addAttribute("message", ex.getMessage());
+        return "registerError";
     }
 }
