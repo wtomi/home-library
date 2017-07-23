@@ -15,10 +15,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class User extends AbstractDomainClass{
+public class User extends AbstractDomainClass {
 
     @Column(unique = true)
     private String username;
+
+    @OneToOne
+    @JoinColumn
+    Library library;
 
     @NotEmpty
     @NotNull
@@ -41,13 +45,13 @@ public class User extends AbstractDomainClass{
     @JoinTable
     private List<Role> roles = new ArrayList<>();
 
-    public void addRole(Role role){
-        if(!this.roles.contains(role)){
+    public void addRole(Role role) {
+        if (!this.roles.contains(role)) {
             this.roles.add(role);
         }
     }
 
-    public void removeRole(Role role){
+    public void removeRole(Role role) {
         this.roles.remove(role);
     }
 
