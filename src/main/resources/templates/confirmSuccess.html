@@ -7,7 +7,8 @@
 <body>
 <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 <div class="container">
-    <h2 th:text="${message}">message</h2>
+    <h2 class="text-success" th:text="${message}">message</h2>
+    <a href="#" th:href="@{/login}" class="btn btn-primary"><span class="glyphicon glyphicon-log-in"></span> Sign in</a>
 </div>
 </body>
 </html>

@@ -1,6 +1,5 @@
 package wojtowicz.tomi.booklibrary.controllers;
 
-import com.sun.javafx.sg.prism.NGShape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
@@ -66,12 +65,13 @@ public class RegistrationController {
             return VIEW_REGISTER;
         }
 
+        model.addAttribute("message", "You have successfully register. We sent you an email with confirmation link.");
         return VIEW_SUCCESSFUL_REGISTER;
     }
 
 
     @RequestMapping("registrationConfirm")
-    public String confirmRegistration(final HttpServletRequest request, Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
+    public String confirmRegistration(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
         VerificationToken verificationToken = userService.getVerificationToken(token);
         if (tokenIsValid(verificationToken)) {
             activateUser(verificationToken);
@@ -99,17 +99,17 @@ public class RegistrationController {
     }
 
     @RequestMapping("confirmSuccess")
-    public String confirmSuccess(Model model) {
+    public String confirmSuccess() {
         return "confirmSuccess";
     }
 
     @RequestMapping("confirmError")
-    public String confirmError(Model model) {
+    public String confirmError() {
         return "confirmError";
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public String registerError(UserAlreadyExistsException ex, Model model) {
+    public String registerError(Model model) {
         model.addAttribute("message", "User with given username or email already exists. Try to sign up with different details :)");
         return "registerError";
     }
