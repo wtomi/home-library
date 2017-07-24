@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
-public class Book {
+public class Book extends AbstractDomainClass{
 
     @NotNull
     @NotEmpty
