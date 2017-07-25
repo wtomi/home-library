@@ -5,12 +5,14 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
-public class Book extends AbstractDomainClass{
+public class Book extends AbstractDomainClass {
 
     @NotNull
     @NotEmpty
@@ -18,5 +20,15 @@ public class Book extends AbstractDomainClass{
 
     @NotNull
     @NotEmpty
-    String author;
+    String authorFirstName;
+
+    @NotNull
+    @NotEmpty
+    String authorLastName;
+
+    @NotNull
+    @NotEmpty
+    @ManyToOne
+    @JoinColumn
+    Library library;
 }

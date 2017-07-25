@@ -4,7 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,4 +16,7 @@ public class Library extends AbstractDomainClass {
 
     @OneToOne(mappedBy = "library")
     User owner;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "library")
+    List<Book> books;
 }

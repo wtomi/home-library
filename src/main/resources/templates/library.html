@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head lang="en">
+    <title>Library</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+<div class="container">
+
+    <h3 th:if="!${books}">Add your books to the library clicking the button below</h3>
+
+    <table th:if="${books}" class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tr th:each="book: ${books}">
+            <td th:hidden="true" th:text="${book.id}"></td>
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.authorFirstName} + ' ' ${book.authorLastName}"></td>
+            <td><a href="#" th:href="@{/library/del/${book.id}}" class="btn btn-danger"></a>delete</td>
+        </tr>
+    </table>
+
+    <a href="#" th:href="@{/library/add}" class="btn btn-primary">Add Book</a>
+
+</div>
+</body>
+</html>

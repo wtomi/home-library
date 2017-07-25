@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head lang="en">
-    <link rel="stylesheet" type="text/css" href="../static/css/guru.css"/>
 </head>
 <body>
 
@@ -13,7 +12,7 @@
                     <a class="navbar-brand" href="#" th:href="@{/}">Home Library</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a href="#" th:href="@{/library}"><span class="glyphicon glyphicon-book"></span> My Library</a></li>
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span
                             class="caret"></span></a>
                         <ul class="dropdown-menu">
