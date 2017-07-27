@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import wojtowicz.tomi.booklibrary.domain.Library;
 
 public interface LibraryRepository extends CrudRepository<Library, Integer> {
-    Library findByUserUsername(String username);
+    Library findByOwnerUsername(String username);
 }

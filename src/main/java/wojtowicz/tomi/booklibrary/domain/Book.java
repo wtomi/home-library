@@ -27,7 +27,6 @@ public class Book extends AbstractDomainClass {
     String authorLastName;
 
     @NotNull
-    @NotEmpty
     @ManyToOne
     @JoinColumn
     Library library;
