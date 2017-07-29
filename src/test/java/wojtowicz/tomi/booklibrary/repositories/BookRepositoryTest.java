@@ -3,7 +3,6 @@ package wojtowicz.tomi.booklibrary.repositories;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -65,4 +64,25 @@ public class BookRepositoryTest {
         List<Book> foundBooks = bookRepository.findByAuthorFirstNameAndAuthorLastNameAllIgnoreCase("Bruca", "Eckell");
         assertThat(foundBooks).isEmpty();
     }
+
+    @Test
+    public void testForValidTitle() {
+        List<Book> foundBooks = bookRepository.findByTitleIgnoreCase("Thinking in java");
+        assertThat(foundBooks).isNotEmpty();
+        assertThat(foundBooks.get(0)).isEqualToComparingFieldByFieldRecursively(book);
+    }
+
+    @Test
+    public void testForInvalidTitle() {
+        List<Book> foundBooks = bookRepository.findByTitleIgnoreCase("Thinkingin java");
+        assertThat(foundBooks).isEmpty();
+    }
+
+    @Test
+    public void testForTitleContaining() {
+        List<Book> foundBooks = bookRepository.findByTitleContainingIgnoreCase("java");
+        assertThat(foundBooks).isNotEmpty();
+        assertThat(foundBooks.get(0)).isEqualToComparingFieldByFieldRecursively(book);
+    }
+
 }
