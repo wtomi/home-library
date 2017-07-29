@@ -26,7 +26,7 @@ public class Book extends AbstractDomainClass {
     @NotEmpty
     String authorLastName;
 
-    @NotNull
+    //TODO add here NotNull and create BookDto
     @ManyToOne
     @JoinColumn
     Library library;

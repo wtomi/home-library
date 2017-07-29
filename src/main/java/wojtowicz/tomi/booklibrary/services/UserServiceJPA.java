@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wojtowicz.tomi.booklibrary.converters.UserDtoToUser;
+import wojtowicz.tomi.booklibrary.domain.Library;
 import wojtowicz.tomi.booklibrary.domain.User;
 import wojtowicz.tomi.booklibrary.domain.VerificationToken;
 import wojtowicz.tomi.booklibrary.dto.UserDto;
@@ -17,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by tommy on 7/9/2017.
- */
 @Service
 @Profile("springdatajpa")
 public class UserServiceJPA implements UserService {
@@ -27,6 +25,10 @@ public class UserServiceJPA implements UserService {
     private UserRepository userRepository;
 
     private EncryptionService encryptionService;
+
+    private RoleService roleService;
+
+    private LibraryService libraryService;
 
     private UserDtoToUser userDtoToUserConverter;
 
@@ -40,6 +42,16 @@ public class UserServiceJPA implements UserService {
     @Autowired
     public void setEncryptionService(EncryptionService encryptionService) {
         this.encryptionService = encryptionService;
+    }
+
+    @Autowired
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
+    @Autowired
+    public void setLibraryService(LibraryService libraryService) {
+        this.libraryService = libraryService;
     }
 
     @Autowired
@@ -84,11 +96,16 @@ public class UserServiceJPA implements UserService {
     }
 
     @Override
+    @Transactional
     public User registerNewUser(final UserDto userDto) {
         if (userAlreadyExists(userDto)) {
             throw new UserAlreadyExistsException("User already exists");
         }
         User user = userDtoToUserConverter.convert(userDto);
+        user.addRole(roleService.getByRole("USER"));
+        Library library = new Library();
+        libraryService.saveOrUpdate(library);
+        user.setLibrary(library);
         return this.saveOrUpdate(user);
     }
 

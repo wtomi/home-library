@@ -4,29 +4,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import wojtowicz.tomi.booklibrary.domain.Library;
 import wojtowicz.tomi.booklibrary.domain.Role;
 import wojtowicz.tomi.booklibrary.domain.User;
+import wojtowicz.tomi.booklibrary.services.LibraryService;
 import wojtowicz.tomi.booklibrary.services.RoleService;
 import wojtowicz.tomi.booklibrary.services.UserService;
 
-/**
- * Created by tommy on 7/9/2017.
- */
 @Component
 public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedEvent>{
 
     private UserService userService;
 
-    @Autowired
-    public void setUserRepository(UserService userService) {
-        this.userService = userService;
-    }
+    private LibraryService libraryService;
 
     private RoleService roleService;
 
     @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
     public void setRoleService(RoleService roleService) {
         this.roleService = roleService;
+    }
+
+    @Autowired
+    public void  setLibraryService(LibraryService libraryService) {
+        this.libraryService = libraryService;
     }
 
     @Override
@@ -54,6 +60,11 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
             user.setEmail(username + "@" + username + "com");
             user.setEnabled(true);
             user.addRole(roleService.getByRole("USER"));
+
+            Library library = new Library();
+            libraryService.saveOrUpdate(library);
+
+            user.setLibrary(library);
             userService.saveOrUpdate(user);
         }
     }

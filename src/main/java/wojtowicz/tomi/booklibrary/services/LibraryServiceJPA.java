@@ -1,16 +1,22 @@
 package wojtowicz.tomi.booklibrary.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import wojtowicz.tomi.booklibrary.domain.Library;
 import wojtowicz.tomi.booklibrary.repositories.LibraryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class LibraryServiceJPA implements LibraryService {
 
-    @Autowired
     private LibraryRepository libraryRepository;
+
+    @Autowired
+    public void setLibraryRepository(LibraryRepository libraryRepository) {
+        this.libraryRepository = libraryRepository;
+    }
 
     @Override
     public List<?> listAll() {
@@ -32,5 +38,10 @@ public class LibraryServiceJPA implements LibraryService {
     @Override
     public void delete(Integer id) {
         libraryRepository.delete(id);
+    }
+
+    @Override
+    public Library getByOwnerUsername(String username) {
+        return libraryRepository.findByOwnerUsername(username);
     }
 }

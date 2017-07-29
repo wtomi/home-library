@@ -8,21 +8,24 @@
 <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 <div class="container">
 
-    <h3 th:if="!${books}">Add your books to the library clicking the button below</h3>
+    <h3 th:if="${books.empty}">Add your books to the library clicking the button below</h3>
 
-    <table th:if="${books}" class="table">
+    <table th:if="!${books.empty}" class="table">
         <thead>
-            <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tr th:each="book: ${books}">
             <td th:hidden="true" th:text="${book.id}"></td>
             <td th:text="${book.title}"></td>
-            <td th:text="${book.authorFirstName} + ' ' ${book.authorLastName}"></td>
-            <td><a href="#" th:href="@{/library/del/${book.id}}" class="btn btn-danger"></a>delete</td>
+            <td th:text="${book.authorFirstName} + ' ' + ${book.authorLastName}"></td>
+            <td>
+                <a href="#" th:href="@{/library/edit/${book.id}}" class="btn btn-info">Edit</a>
+                <a href="#" th:href="@{/library/del/${book.id}}" class="btn btn-danger">Delete</a>
+            </td>
         </tr>
     </table>
 

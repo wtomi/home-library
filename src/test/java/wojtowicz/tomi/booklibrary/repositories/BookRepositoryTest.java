@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import wojtowicz.tomi.booklibrary.domain.Book;
 import wojtowicz.tomi.booklibrary.domain.Library;
+import wojtowicz.tomi.booklibrary.domain.User;
 
 import java.util.List;
 
@@ -30,6 +31,14 @@ public class BookRepositoryTest {
     public void setUp() {
         Library library = new Library();
         library = entityManager.persist(library);
+
+        User user = new User();
+        user.setLibrary(library);
+        user.setUsername("user");
+        user.setEmail("email@email");
+        user.setPassword("user");
+        user.setEncryptedPassword("pass");
+        entityManager.persist(user);
 
         book = new Book();
         book.setTitle("Thinking in Java");
@@ -83,6 +92,19 @@ public class BookRepositoryTest {
         List<Book> foundBooks = bookRepository.findByTitleContainingIgnoreCase("java");
         assertThat(foundBooks).isNotEmpty();
         assertThat(foundBooks.get(0)).isEqualToComparingFieldByFieldRecursively(book);
+    }
+
+    @Test
+    public void testForOwnerName() {
+        List<Book> foundBooks = bookRepository.findByLibraryOwnerUsername("user");
+        assertThat(foundBooks).isNotEmpty();
+        assertThat(foundBooks.get(0)).isEqualToComparingFieldByFieldRecursively(book);
+    }
+
+    @Test
+    public void testForInvalidOwnerName() {
+        List<Book> foundBooks = bookRepository.findByLibraryOwnerUsername("userr");
+        assertThat(foundBooks).isEmpty();
     }
 
 }
