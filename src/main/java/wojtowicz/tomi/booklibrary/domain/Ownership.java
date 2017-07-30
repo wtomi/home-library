@@ -11,6 +11,12 @@ import java.util.List;
 @Entity
 public class Ownership extends AbstractDomainClass {
 
+    public Ownership() {}
+
+    public Ownership(BookData bookData) {
+        this.bookData = bookData;
+    }
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private BookData bookData;

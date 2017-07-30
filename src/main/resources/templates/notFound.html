@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head lang="en">
+    <title>Not Found</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+<div class="container">
+    <h2 class="text-danger" th:text="${message}">message</h2>
+    <a href="#" th:href="@{/library}" class="btn btn-primary"><span class="glyphicon glyphicon-log-in"></span> Go to
+        library</a>
+</div>
+</body>
+</html>

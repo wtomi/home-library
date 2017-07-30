@@ -1,12 +1,22 @@
 package wojtowicz.tomi.booklibrary.domain;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.List;
 
+@Getter
+@Setter
+@Entity
 public class BookData extends AbstractDomainClass {
+
+    public BookData(Book book, Library library) {
+        this.book = book;
+        this.library = library;
+    }
+
+    public BookData() {}
 
     @ManyToOne
     @JoinColumn(nullable = false)
