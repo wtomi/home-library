@@ -1,6 +1,7 @@
 package wojtowicz.tomi.booklibrary.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,11 +72,14 @@ public class RegistrationController {
 
 
     @RequestMapping("registrationConfirm")
-    public String confirmRegistration(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
+    public String confirmRegistration(@RequestParam("token") String token, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {
         VerificationToken verificationToken = userService.getVerificationToken(token);
-        if (tokenIsValid(verificationToken)) {
+        if (tokenNotNull(verificationToken) && tokenNotExpired(verificationToken)) {
             activateUser(verificationToken);
             redirectAttributes.addFlashAttribute("message", "Your registration has been confirmed successfully.");
+        } else if (!tokenNotNull(verificationToken)) {
+            redirectAttributes.addFlashAttribute("message", "Confirmation link is invalid");
+            return "redirect:/confirmError";
         } else {
             redirectAttributes.addFlashAttribute("expired", true);
             redirectAttributes.addFlashAttribute("token", verificationToken);
@@ -91,9 +95,11 @@ public class RegistrationController {
         userService.saveOrUpdate(user);
     }
 
-    private boolean tokenIsValid(VerificationToken verificationToken) {
-        if (verificationToken == null)
-            return false;
+    private boolean tokenNotNull(VerificationToken verificationToken) {
+        return !(verificationToken == null);
+    }
+
+    private boolean tokenNotExpired(VerificationToken verificationToken) {
         final Calendar cal = Calendar.getInstance();
         return cal.getTime().getTime() - verificationToken.getExpiryDate().getTime() < 0;
     }
