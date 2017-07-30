@@ -9,9 +9,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tommy on 7/6/2017.
- */
 @Getter
 @Setter
 @Entity
@@ -22,7 +19,7 @@ public class User extends AbstractDomainClass {
 
     @OneToOne
     @JoinColumn
-    Library library;
+    private Library library;
 
     @NotEmpty
     @NotNull

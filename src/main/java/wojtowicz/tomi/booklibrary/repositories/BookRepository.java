@@ -10,5 +10,4 @@ public interface BookRepository extends CrudRepository<Book, Integer>{
     List<Book> findByAuthorFirstNameAndAuthorLastNameAllIgnoreCase(String firstName, String lastName);
     List<Book> findByTitleIgnoreCase(String title);
     List<Book> findByTitleContainingIgnoreCase(String word);
-    List<Book> findByLibraryOwnerUsername(String username);
 }

@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,18 +15,16 @@ public class Book extends AbstractDomainClass {
 
     @NotNull
     @NotEmpty
-    String title;
+    private String title;
 
     @NotNull
     @NotEmpty
-    String authorFirstName;
+    private String authorFirstName;
 
     @NotNull
     @NotEmpty
-    String authorLastName;
+    private String authorLastName;
 
-    //TODO add here NotNull and create BookDto
-    @ManyToOne
-    @JoinColumn
-    Library library;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<BookData> bookDataList;
 }

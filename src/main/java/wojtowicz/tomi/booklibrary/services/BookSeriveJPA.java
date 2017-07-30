@@ -54,9 +54,4 @@ public class BookSeriveJPA implements BookService {
     public List<Book> getByTitleContainingIgnoreCase(String word) {
         return bookRepository.findByTitleContainingIgnoreCase(word);
     }
-
-    @Override
-    public List<Book> getByLibraryOwnerUsername(String username) {
-        return bookRepository.findByLibraryOwnerUsername(username);
-    }
 }

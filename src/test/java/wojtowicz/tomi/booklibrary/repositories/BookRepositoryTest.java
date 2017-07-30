@@ -44,7 +44,6 @@ public class BookRepositoryTest {
         book.setTitle("Thinking in Java");
         book.setAuthorFirstName("Bruce");
         book.setAuthorLastName("Eckel");
-        book.setLibrary(library);
         entityManager.persist(book);
     }
 
@@ -93,18 +92,4 @@ public class BookRepositoryTest {
         assertThat(foundBooks).isNotEmpty();
         assertThat(foundBooks.get(0)).isEqualToComparingFieldByFieldRecursively(book);
     }
-
-    @Test
-    public void testForOwnerName() {
-        List<Book> foundBooks = bookRepository.findByLibraryOwnerUsername("user");
-        assertThat(foundBooks).isNotEmpty();
-        assertThat(foundBooks.get(0)).isEqualToComparingFieldByFieldRecursively(book);
-    }
-
-    @Test
-    public void testForInvalidOwnerName() {
-        List<Book> foundBooks = bookRepository.findByLibraryOwnerUsername("userr");
-        assertThat(foundBooks).isEmpty();
-    }
-
 }

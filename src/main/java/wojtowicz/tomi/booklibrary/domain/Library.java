@@ -15,8 +15,8 @@ import java.util.List;
 public class Library extends AbstractDomainClass {
 
     @OneToOne(mappedBy = "library")
-    User owner;
+    private User owner;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "library")
-    List<Book> books;
+    private List<BookData> books;
 }

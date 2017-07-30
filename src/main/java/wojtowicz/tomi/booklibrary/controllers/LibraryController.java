@@ -44,8 +44,7 @@ public class LibraryController {
 
     @RequestMapping("/library")
     public String library(Model model, Principal principal) {
-        List<Book> books = bookService.getByLibraryOwnerUsername(principal.getName());
-        model.addAttribute("books", books);
+
         return "library";
     }
 
@@ -63,8 +62,9 @@ public class LibraryController {
             return "createBook";
         }
         Library library = libraryService.getByOwnerUsername(principal.getName());
-        book.setLibrary(library);
-        bookService.saveOrUpdate(book);
+
+
+
         return "redirect:/library";
     }
 }
