@@ -3,10 +3,7 @@ package wojtowicz.tomi.booklibrary.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -19,4 +16,8 @@ public class Library extends AbstractDomainClass {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "library")
     private List<BookData> books;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "friendsLibraries")
+    private List<User> quests;
+
 }

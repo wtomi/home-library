@@ -14,14 +14,12 @@ import wojtowicz.tomi.booklibrary.dto.UserDto;
 import wojtowicz.tomi.booklibrary.exceptions.UserAlreadyExistsException;
 import wojtowicz.tomi.booklibrary.registration.event.OnRegistrationCompleteEvent;
 import wojtowicz.tomi.booklibrary.services.UserService;
+import wojtowicz.tomi.booklibrary.utils.UrlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Calendar;
 
-/**
- * Created by tommy on 7/17/2017.
- */
 @Controller
 public class RegistrationController {
 
@@ -60,7 +58,7 @@ public class RegistrationController {
         }
         final User registeredUser = userService.registerNewUser(userDto);
         try {
-            final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+            final String appUrl = UrlUtils.getAppUrl(request);
             applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser, appUrl, request.getLocale()));
         } catch (final Exception ex) {
             return VIEW_REGISTER;

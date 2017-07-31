@@ -1,6 +1,7 @@
 package wojtowicz.tomi.booklibrary.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,11 +9,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import wojtowicz.tomi.booklibrary.adduser.event.OnAddUserSuccess;
 import wojtowicz.tomi.booklibrary.domain.Book;
 import wojtowicz.tomi.booklibrary.domain.BookData;
+import wojtowicz.tomi.booklibrary.domain.Library;
+import wojtowicz.tomi.booklibrary.dto.EmailDto;
 import wojtowicz.tomi.booklibrary.services.BookService;
 import wojtowicz.tomi.booklibrary.services.LibraryService;
+import wojtowicz.tomi.booklibrary.utils.UrlUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -25,6 +31,8 @@ public class LibraryController {
 
     private LibraryService libraryService;
 
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Autowired
     public void setBookService(BookService bookService) {
         this.bookService = bookService;
@@ -33,6 +41,11 @@ public class LibraryController {
     @Autowired
     public void setLibraryService(LibraryService libraryService) {
         this.libraryService = libraryService;
+    }
+
+    @Autowired
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @RequestMapping("/library")
@@ -80,5 +93,20 @@ public class LibraryController {
     public String addExistingBook(@PathVariable(value = "bookId") final int bookId, Principal principal) {
         libraryService.addExistingBook(bookId, principal.getName());
         return "redirect:/library";
+    }
+
+    @RequestMapping(value = "/library/adduser", method = RequestMethod.POST)
+    public String addUser(HttpServletRequest request, Model model, @ModelAttribute @Valid final EmailDto emailDto,
+                          BindingResult bindingResult, Principal principal) {
+
+        if (bindingResult.hasErrors()) {
+            return "library";
+        }
+
+        Library library = libraryService.getByOwnerUsername(principal.getName());
+        String appUrl = UrlUtils.getAppUrl(request);
+        applicationEventPublisher.publishEvent(new OnAddUserSuccess(emailDto.getEmail(), library, appUrl));
+        model.addAttribute("message", "User added successfully");
+        return "library?useradded";
     }
 }

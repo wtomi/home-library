@@ -3,12 +3,10 @@ package wojtowicz.tomi.booklibrary.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import wojtowicz.tomi.booklibrary.domain.Book;
-import wojtowicz.tomi.booklibrary.domain.BookData;
-import wojtowicz.tomi.booklibrary.domain.Library;
-import wojtowicz.tomi.booklibrary.domain.Ownership;
+import wojtowicz.tomi.booklibrary.domain.*;
 import wojtowicz.tomi.booklibrary.exceptions.NotFoundException;
 import wojtowicz.tomi.booklibrary.repositories.BookDataRepository;
+import wojtowicz.tomi.booklibrary.repositories.InvitationRepository;
 import wojtowicz.tomi.booklibrary.repositories.LibraryRepository;
 import wojtowicz.tomi.booklibrary.repositories.OwnershipRepository;
 
@@ -25,6 +23,8 @@ public class LibraryServiceJPA implements LibraryService {
     private BookDataRepository bookDataRepository;
 
     private OwnershipRepository ownershipRepository;
+
+    private InvitationRepository invitationRepository;
 
     @Autowired
     public void setLibraryRepository(LibraryRepository libraryRepository) {
@@ -44,6 +44,11 @@ public class LibraryServiceJPA implements LibraryService {
     @Autowired
     public void setOwnershipRepository(OwnershipRepository ownershipRepository) {
         this.ownershipRepository = ownershipRepository;
+    }
+
+    @Autowired
+    public void setInvitationRepository(InvitationRepository invitationRepository) {
+        this.invitationRepository = invitationRepository;
     }
 
     @Override
@@ -104,5 +109,15 @@ public class LibraryServiceJPA implements LibraryService {
     @Override
     public List<BookData> getByLibraryOwnerUsername(String username) {
         return bookDataRepository.findByLibraryOwnerUsername(username);
+    }
+
+    @Override
+    public Invitation createInvitation(String addedUserEmail, Library library) {
+        Invitation invitation = invitationRepository.findByAddedUserEmailAndLibrary(addedUserEmail, library);
+        if (invitation == null) {
+            invitation = new Invitation(addedUserEmail, library);
+            invitationRepository.save(invitation);
+        }
+        return invitation;
     }
 }

@@ -21,6 +21,10 @@ public class User extends AbstractDomainClass {
     @JoinColumn
     private Library library;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable
+    private List<Library> friendsLibraries;
+
     @NotEmpty
     @NotNull
     private String email;
