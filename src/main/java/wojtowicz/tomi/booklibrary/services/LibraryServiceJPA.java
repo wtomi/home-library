@@ -107,7 +107,7 @@ public class LibraryServiceJPA implements LibraryService {
     }
 
     @Override
-    public List<BookData> getByLibraryOwnerUsername(String username) {
+    public List<BookData> getBookDataByLibraryOwnerUsername(String username) {
         return bookDataRepository.findByLibraryOwnerUsername(username);
     }
 
@@ -119,5 +119,22 @@ public class LibraryServiceJPA implements LibraryService {
             invitationRepository.save(invitation);
         }
         return invitation;
+    }
+
+    @Override
+    @Transactional
+    public Library addGuestToLibrary(Integer libraryId, User user) {
+        Library library = getById(libraryId);
+        Invitation invitation = invitationRepository.findByAddedUserEmailAndLibrary(user.getEmail(), library);
+        if (invitation == null)
+            throw new NotFoundException();
+        invitationRepository.delete(invitation);
+        library.addGuest(user);
+        return this.saveOrUpdate(library);
+    }
+
+    @Override
+    public Library getByIdAndGuestsUsername(Integer id, String username) {
+        return libraryRepository.findByIdAndGuestsUsername(id, username);
     }
 }

@@ -5,4 +5,5 @@ import wojtowicz.tomi.booklibrary.domain.Library;
 
 public interface LibraryRepository extends CrudRepository<Library, Integer> {
     Library findByOwnerUsername(String username);
+    Library findByIdAndGuestsUsername(Integer id, String username);
 }

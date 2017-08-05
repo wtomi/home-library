@@ -17,7 +17,13 @@ public class Library extends AbstractDomainClass {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "library")
     private List<BookData> books;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "friendsLibraries")
-    private List<User> quests;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable
+    private List<User> guests;
 
+    public void addGuest(User user) {
+        if(!guests.contains(user)) {
+            guests.add(user);
+        }
+    }
 }

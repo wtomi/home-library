@@ -57,7 +57,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
             User user = new User();
             user.setUsername(username);
             user.setPassword(username);
-            user.setEmail(username + "@" + username + "com");
+            user.setEmail(username + "@" + username + ".com");
             user.setEnabled(true);
             user.addRole(roleService.getByRole("USER"));
 

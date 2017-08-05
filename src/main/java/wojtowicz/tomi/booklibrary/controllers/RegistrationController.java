@@ -3,7 +3,9 @@ package wojtowicz.tomi.booklibrary.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,7 @@ public class RegistrationController {
         return VIEW_REGISTER;
     }
 
+    @Transactional
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public String registerPagePost(@ModelAttribute(MODEL_ATTRIBUTE_USER) @Valid final UserDto userDto,
                                    BindingResult bindingResult, final HttpServletRequest request, Model model) {
@@ -57,17 +60,18 @@ public class RegistrationController {
             return VIEW_REGISTER;
         }
         final User registeredUser = userService.registerNewUser(userDto);
-        try {
-            final String appUrl = UrlUtils.getAppUrl(request);
-            applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser, appUrl, request.getLocale()));
-        } catch (final Exception ex) {
-            return VIEW_REGISTER;
-        }
+        final String appUrl = UrlUtils.getAppUrl(request);
+        applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser, appUrl, request.getLocale()));
 
         model.addAttribute("message", "You have successfully register. We sent you an email with confirmation link.");
         return VIEW_SUCCESSFUL_REGISTER;
     }
 
+    @ExceptionHandler(MailException.class)
+    public String mailException(Model model) {
+        model.addAttribute("message", "Sorry, we were unable to send email to the given address");
+        return "errorMassage";
+    }
 
     @RequestMapping("registrationConfirm")
     public String confirmRegistration(@RequestParam("token") String token, RedirectAttributes redirectAttributes) throws ResourceNotFoundException {

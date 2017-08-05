@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head lang="en">
+    <title>Library</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+<div class="container">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Owner</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tr>
+            <td>My Library</td>
+            <td>
+                <a href="#" th:href="${'library'}" class="btn btn-info">View</a>
+            </td>
+        </tr>
+        <tr th:each="library: ${libraries}">
+            <td th:text="${library.owner.username}"></td>
+            <td>
+                <a href="#" th:href="${'library/' + library.id}" class="btn btn-info">View</a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

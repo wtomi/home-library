@@ -8,7 +8,9 @@
 <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 <div class="container">
 
-    <h3 th:if="${books.empty}">Add your books to the library clicking the button below</h3>
+    <div th:if="${owner}">
+        <h3 th:if="${books.empty}">Add your books to the library clicking the button below</h3>
+    </div>
 
     <table th:if="!${books.empty}" class="table">
         <thead>
@@ -19,28 +21,33 @@
         </tr>
         </thead>
         <tr th:each="book: ${books}">
-            <td th:hidden="true" th:text="${book.id}"></td>
             <td th:text="${book.title}"></td>
             <td th:text="${book.authorFirstName} + ' ' + ${book.authorLastName}"></td>
             <td>
-                <a href="#" th:href="${'edit/' + book.id}" class="btn btn-info">Edit</a>
+                <a th:if="${owner}" href="#" th:href="${'delete/' + book.id}" class="btn btn-danger">Delete</a>
+                <a href="#" th:href="${'view/' + book.id}" class="btn btn-info">View</a>
+                <a href="#" th:href="${'rent/' + book.id}" class="btn btn-info">Rent</a>
             </td>
         </tr>
     </table>
 
-    <a href="#" th:href="@{/library/add}" class="btn btn-primary">Add Book</a>
+    <div th:if="${owner}">
 
-    <h3>Invite another user to your library</h3>
-    <div class="row">
-        <div class="col-xs-12 col-md-6 col-lg-4">
-            <form th:action="@{/library/adduser}" method="post">
-                <div class="form-group">
-                    <input type="email" class="form-control" name="email" placeholder="User Email"
-                           th:required="true"/>
-                </div>
-                <button type="submit" class="btn btn-info">Add Library User</button>
-            </form>
+        <a href="#" th:href="@{/library/add}" class="btn btn-primary">Add Book</a>
+
+        <h3>Invite another user to your library</h3>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <form th:action="@{/library/adduser}" method="post">
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="User Email"
+                               th:required="true"/>
+                    </div>
+                    <button type="submit" class="btn btn-info">Add Library User</button>
+                </form>
+            </div>
         </div>
+
     </div>
 
 </div>
