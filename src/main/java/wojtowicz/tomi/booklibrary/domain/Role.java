@@ -5,14 +5,10 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tommy on 7/6/2017.
- */
 @Getter
 @Setter
 @Entity

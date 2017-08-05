@@ -6,9 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by tommy on 7/6/2017.
- */
 @Getter
 @Setter
 @MappedSuperclass

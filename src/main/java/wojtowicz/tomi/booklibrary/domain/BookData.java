@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"book_id", "library_id"}))
 public class BookData extends AbstractDomainClass {
 
     public BookData(Book book, Library library) {
@@ -19,11 +20,11 @@ public class BookData extends AbstractDomainClass {
     public BookData() {}
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "library_id", nullable = false)
     private Library library;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookData")
