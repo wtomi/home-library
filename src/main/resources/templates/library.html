@@ -12,6 +12,43 @@
         <h3 th:if="${books.empty}">Add your books to the library clicking the button below</h3>
     </div>
 
+    <div class="row text-right">
+        <div class="col-xs-0 col-md-6 col-lg-8"></div>
+        <div class="col-xs-12 col-md-6 col-lg-4">
+            <form action="" method="get" class="">
+                <div class="input-group">
+                    <input type="Search" placeholder="Search..." name="search" class="form-control"/>
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-info">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <a href="#advanced-search" data-toggle="collapse">Advanced Search</a>
+        </div>
+    </div>
+
+    <div id="advanced-search" class="collapse row">
+        <div class="col-xs-0 col-md-6 col-lg-8"></div>
+        <div class="col-xs-12 col-md-6 col-lg-4">
+            <form>
+                <div class="form-group">
+                    <input type="text" name="title" placeholder="Title" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="authorFirstName" placeholder="Author First Name" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="authorLastName" placeholder="Author Last Name" class="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-info pull-right"><span class="glyphicon glyphicon-search"></span>Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+
     <table th:if="!${books.empty}" class="table">
         <thead>
         <tr>
