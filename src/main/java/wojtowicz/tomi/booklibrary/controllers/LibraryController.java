@@ -8,11 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import wojtowicz.tomi.booklibrary.adduser.event.OnAddUserSuccess;
-import wojtowicz.tomi.booklibrary.domain.Book;
-import wojtowicz.tomi.booklibrary.domain.BookData;
-import wojtowicz.tomi.booklibrary.domain.Library;
-import wojtowicz.tomi.booklibrary.domain.User;
+import wojtowicz.tomi.booklibrary.domain.*;
 import wojtowicz.tomi.booklibrary.dto.EmailDto;
+import wojtowicz.tomi.booklibrary.dto.RentalDto;
 import wojtowicz.tomi.booklibrary.exceptions.NotFoundException;
 import wojtowicz.tomi.booklibrary.services.BookService;
 import wojtowicz.tomi.booklibrary.services.LibraryService;
@@ -104,6 +102,7 @@ public class LibraryController {
                 .map(BookData::getBook)
                 .collect(Collectors.toList());
         model.addAttribute("books", books);
+        model.addAttribute("libraryId", libraryId);
         return "library";
     }
 
@@ -201,5 +200,35 @@ public class LibraryController {
         }
         model.addAttribute("books", books);
         return "books";
+    }
+
+    @RequestMapping(value = "/borrow", method = RequestMethod.GET)
+    public String borrow(Model model, Principal principal,
+                         @RequestParam("library") Integer libraryId,
+                         @RequestParam("book") Integer bookId) {
+        prepareBorrowModel(model, libraryId, bookId);
+        return "borrow";
+    }
+
+    @RequestMapping(value = "/borrow", method = RequestMethod.POST)
+    public String borrowPost(Model model, @Valid RentalDto rentalDto, BindingResult bindingResult, Principal principal) {
+        if(bindingResult.hasErrors()) {
+            prepareBorrowModel(model, rentalDto.getLibraryId(), rentalDto.getBookId());
+            return "borrow";
+        }
+        Library borrowerLibrary = libraryService.getByOwnerUsername(principal.getName());
+        libraryService.addRental(rentalDto.getLibraryId(), borrowerLibrary.getId(),
+                rentalDto.getBookId(), rentalDto.getDays());
+        model.addAttribute("message", "Book has been borrowed, congratulations");
+        return "successMessage";
+    }
+
+    private void prepareBorrowModel(Model model, Integer libraryId, Integer bookId) {
+        if (libraryId != null && bookId != null) {
+            Book book = bookService.getById(bookId);
+            model.addAttribute("book", book);
+            model.addAttribute("libraryId", libraryId);
+        } else
+            throw new NotFoundException("Not Found");
     }
 }

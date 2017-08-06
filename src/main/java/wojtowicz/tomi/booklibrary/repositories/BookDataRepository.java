@@ -12,6 +12,8 @@ import java.util.List;
 public interface BookDataRepository extends CrudRepository<BookData, Integer> {
     BookData findByLibraryAndBook(Library library, Book book);
 
+    BookData findByLibraryIdAndBookId(Integer libraryId, Integer bookId);
+
     List<BookData> findByLibraryOwnerUsername(String username);
 
     List<BookData> findByLibraryIdAndBookTitleContainingIgnoreCaseAndBookAuthorFirstNameContainingIgnoreCaseAndBookAuthorLastNameContainingIgnoreCase(

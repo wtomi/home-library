@@ -79,9 +79,11 @@
             <td th:text="${book.title}"></td>
             <td th:text="${book.authorFirstName} + ' ' + ${book.authorLastName}"></td>
             <td>
-                <a th:if="${owner}" href="#" th:href="${'delete/' + book.id}" class="btn btn-danger">Delete</a>
-                <a href="#" th:href="${'view/' + book.id}" class="btn btn-info">View</a>
-                <a th:if="!${owner}" href="#" th:href="${'borrow/' + book.id}" class="btn btn-info">Borrow</a>
+                <a th:if="${owner}" href="#" th:href="@{/library/delete/{bookId}(bookId=${book.id})}" class="btn btn-danger">Delete</a>
+                <a href="#" th:href="@{library/view/{book}(book=${book.id})}" class="btn btn-info">View</a>
+                <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.id})}" class="btn btn-info">
+                    Borrow
+                </a>
             </td>
         </tr>
     </table>

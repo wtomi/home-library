@@ -14,4 +14,5 @@ public interface LibraryService extends CRUDService<Library> {
     Library getByIdAndGuestsUsername(Integer id, String username);
     List<BookData> searchBooksInLibrary(Integer id, String title, String authorFirstName, String authorLastName);
     List<BookData> searchBooksInLibrary(Integer id, String searchPhrase);
+    Rental addRental(Integer ownerLibraryId, Integer borrowerLibraryId, Integer bookId, int days);
 }

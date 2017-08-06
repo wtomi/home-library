@@ -12,12 +12,12 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"book_id", "library_id"}))
 public class BookData extends AbstractDomainClass {
 
+    public BookData() {}
+
     public BookData(Book book, Library library) {
         this.book = book;
         this.library = library;
     }
-
-    public BookData() {}
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
