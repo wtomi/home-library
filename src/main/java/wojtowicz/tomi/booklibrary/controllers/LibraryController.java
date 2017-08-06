@@ -2,6 +2,7 @@ package wojtowicz.tomi.booklibrary.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,8 +57,22 @@ public class LibraryController {
     }
 
     @RequestMapping("/library")
-    public String library(Model model, Principal principal) {
-        List<BookData> bookDataList = libraryService.getBookDataByLibraryOwnerUsername(principal.getName());
+    public String library(Model model, Principal principal,
+                          @RequestParam(required = false) String search,
+                          @RequestParam(required = false) String title,
+                          @RequestParam(required = false) String authorFirstName,
+                          @RequestParam(required = false) String authorLastName,
+                          @RequestParam(required = false) String scope) {
+        List<BookData> bookDataList;
+        if (search != null) {
+            Library library = libraryService.getByOwnerUsername(principal.getName());
+            bookDataList = libraryService.searchBooksInLibrary(library.getId(), search);
+        } else if (title != null) {
+            Library library = libraryService.getByOwnerUsername(principal.getName());
+            bookDataList = libraryService.searchBooksInLibrary(library.getId(), title, authorFirstName, authorLastName);
+        } else {
+            bookDataList = libraryService.getBookDataByLibraryOwnerUsername(principal.getName());
+        }
         List<Book> books = bookDataList.stream()
                 .map(BookData::getBook)
                 .collect(Collectors.toList());
@@ -67,12 +82,24 @@ public class LibraryController {
     }
 
     @RequestMapping("/library/{libraryId}")
-    public String libraryById(Model model, Principal principal, @PathVariable Integer libraryId) {
+    public String libraryById(Model model, Principal principal, @PathVariable Integer libraryId,
+                              @RequestParam(required = false) String search,
+                              @RequestParam(required = false) String title,
+                              @RequestParam(required = false) String authorFirstName,
+                              @RequestParam(required = false) String authorLastName,
+                              @RequestParam(required = false) String scope) {
         Library library = libraryService.getByIdAndGuestsUsername(libraryId, principal.getName());
+        List<BookData> bookDataList;
         if (library == null) {
             throw new NotFoundException("Library not found");
         }
-        List<BookData> bookDataList = library.getBooks();
+        if (search != null) {
+            bookDataList = libraryService.searchBooksInLibrary(libraryId, search);
+        } else if (title != null) {
+            bookDataList = libraryService.searchBooksInLibrary(libraryId, title, authorFirstName, authorLastName);
+        } else {
+            bookDataList = library.getBooks();
+        }
         List<Book> books = bookDataList.stream()
                 .map(BookData::getBook)
                 .collect(Collectors.toList());
@@ -127,12 +154,17 @@ public class LibraryController {
         if (bindingResult.hasErrors()) {
             return "redirect:/library";
         }
-
         Library library = libraryService.getByOwnerUsername(principal.getName());
         String appUrl = UrlUtils.getAppUrl(request);
         applicationEventPublisher.publishEvent(new OnAddUserSuccess(emailDto.getEmail(), library, appUrl));
         model.addAttribute("message", "User added successfully");
         return "redirect:/library.html?useradded";
+    }
+
+    @ExceptionHandler(MailException.class)
+    public String mailException(Model model) {
+        model.addAttribute("message", "Sorry, we were unable to send email to the given address");
+        return "errorMassage";
     }
 
     @RequestMapping(value = "/invitation")

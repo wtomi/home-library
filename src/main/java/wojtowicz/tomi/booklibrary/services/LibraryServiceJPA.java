@@ -137,4 +137,16 @@ public class LibraryServiceJPA implements LibraryService {
     public Library getByIdAndGuestsUsername(Integer id, String username) {
         return libraryRepository.findByIdAndGuestsUsername(id, username);
     }
+
+    @Override
+    public List<BookData> searchBooksInLibrary(Integer id, String title, String authorFirstName, String authorLastName) {
+        return bookDataRepository.findByLibraryIdAndBookTitleContainingIgnoreCaseAndBookAuthorFirstNameContainingIgnoreCaseAndBookAuthorLastNameContainingIgnoreCase(
+                id, title, authorFirstName, authorLastName);
+    }
+
+    @Override
+    public List<BookData> searchBooksInLibrary(Integer id, String searchPhrase) {
+        return bookDataRepository.findByLibraryIdAndBookTitleContainingIgnoreCaseOrBookAuthorFirstNameContainingIgnoreCaseOrBookAuthorLastNameContainingIgnoreCase(
+          id, searchPhrase, searchPhrase, searchPhrase);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import wojtowicz.tomi.booklibrary.adduser.event.OnAddUserSuccess;
 import wojtowicz.tomi.booklibrary.services.LibraryService;
 
@@ -33,6 +34,7 @@ public class AddUserListener implements ApplicationListener<OnAddUserSuccess> {
         this.libraryService = libraryService;
     }
 
+    @Transactional
     @Override
     public void onApplicationEvent(OnAddUserSuccess event) {
         libraryService.createInvitation(event.getAddedUserEmail(), event.getLibrary());
