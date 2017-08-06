@@ -9,6 +9,9 @@ public interface LibraryService extends CRUDService<Library> {
     Book createNewBook(Book book, String username);
     Book addExistingBook(Integer bookId, String username);
     List<BookData> getBookDataByLibraryOwnerUsername(String username);
+    List<BookData> getNotLentBookDataByOwnerUsername(String username);
+    List<BookData> getLentBooksByOwnerUsername(String name);
+    List<BookData> getBorrowedBooksByOwnerUsername(String name);
     Invitation createInvitation(String addedUserEmail, Library library);
     Library addGuestToLibrary(Integer libraryId, User user);
     Library getByIdAndGuestsUsername(Integer id, String username);

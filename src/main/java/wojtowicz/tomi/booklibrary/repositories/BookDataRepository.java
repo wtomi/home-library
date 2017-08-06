@@ -24,4 +24,15 @@ public interface BookDataRepository extends CrudRepository<BookData, Integer> {
             "UPPER(d.book.authorFirstName) LIKE '%'||UPPER(:searchPhrase)||'%' OR " +
             "UPPER(d.book.authorLastName) LIKE '%'||UPPER(:searchPhrase)||'%')")
     List<BookData> findByLibraryIdAndSearchPhrase(@Param("id") Integer id, @Param("searchPhrase") String searchPhrase);
+
+    @Query("SELECT DISTINCT d FROM BookData d INNER JOIN d.ownerships o WHERE d.library.owner.username = :username AND " +
+            "o.currentRental IS NULL")
+    List<BookData> findNotLentBooks(@Param("username") String username);
+
+    @Query("SELECT DISTINCT d FROM BookData d INNER JOIN d.ownerships o WHERE d.library.owner.username = :username AND " +
+            "o.currentRental IS NOT NULL")
+    List<BookData> findLentBooks(@Param("username") String username);
+
+    @Query("SELECT DISTINCT d FROM BookData d INNER JOIN d.rentals WHERE d.library.owner.username = :username")
+    List<BookData> findBorrowedBooks(@Param("username") String username);
 }

@@ -20,6 +20,7 @@ import wojtowicz.tomi.booklibrary.utils.UrlUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,8 @@ public class LibraryController {
                           @RequestParam(required = false) String authorLastName,
                           @RequestParam(required = false) String scope) {
         List<BookData> bookDataList;
+        List<BookData> borrowedBookDataList = Collections.emptyList();
+        List<BookData> lentBookDataList = Collections.emptyList();
         if (search != null) {
             Library library = libraryService.getByOwnerUsername(principal.getName());
             bookDataList = libraryService.searchBooksInLibrary(library.getId(), search);
@@ -69,12 +72,13 @@ public class LibraryController {
             Library library = libraryService.getByOwnerUsername(principal.getName());
             bookDataList = libraryService.searchBooksInLibrary(library.getId(), title, authorFirstName, authorLastName);
         } else {
-            bookDataList = libraryService.getBookDataByLibraryOwnerUsername(principal.getName());
+            bookDataList = libraryService.getNotLentBookDataByOwnerUsername(principal.getName());
+            lentBookDataList = libraryService.getLentBooksByOwnerUsername(principal.getName());
+            borrowedBookDataList = libraryService.getBorrowedBooksByOwnerUsername(principal.getName());
         }
-        List<Book> books = bookDataList.stream()
-                .map(BookData::getBook)
-                .collect(Collectors.toList());
-        model.addAttribute("books", books);
+        model.addAttribute("books", bookDataList);
+        model.addAttribute("borrowedBooks", borrowedBookDataList);
+        model.addAttribute("lentBooks", lentBookDataList);
         model.addAttribute("owner", true);
         return "library";
     }
@@ -98,10 +102,7 @@ public class LibraryController {
         } else {
             bookDataList = library.getBooks();
         }
-        List<Book> books = bookDataList.stream()
-                .map(BookData::getBook)
-                .collect(Collectors.toList());
-        model.addAttribute("books", books);
+        model.addAttribute("books", bookDataList);
         model.addAttribute("libraryId", libraryId);
         return "library";
     }
@@ -212,7 +213,7 @@ public class LibraryController {
 
     @RequestMapping(value = "/borrow", method = RequestMethod.POST)
     public String borrowPost(Model model, @Valid RentalDto rentalDto, BindingResult bindingResult, Principal principal) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             prepareBorrowModel(model, rentalDto.getLibraryId(), rentalDto.getBookId());
             return "borrow";
         }

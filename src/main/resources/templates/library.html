@@ -63,34 +63,84 @@
         </div>
     </div>
 
-    <div th:if="${owner}">
-        <h3 th:if="${books.empty}">Add your books to the library clicking the button below</h3>
+    <div th:if="${!(books eq null) and !books.empty}">
+        <h3>Books on Shelf</h3>
+        <table th:if="!${books.empty}" class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tr th:each="book: ${books}">
+                <td th:text="${book.book.title}"></td>
+                <td th:text="${book.book.authorFirstName} + ' ' + ${book.book.authorLastName}"></td>
+                <td>
+                    <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
+                    <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
+                       class="btn btn-info">
+                        Borrow
+                    </a>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <table th:if="!${books.empty}" class="table">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tr th:each="book: ${books}">
-            <td th:text="${book.title}"></td>
-            <td th:text="${book.authorFirstName} + ' ' + ${book.authorLastName}"></td>
-            <td>
-                <a th:if="${owner}" href="#" th:href="@{/library/delete/{bookId}(bookId=${book.id})}" class="btn btn-danger">Delete</a>
-                <a href="#" th:href="@{library/view/{book}(book=${book.id})}" class="btn btn-info">View</a>
-                <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.id})}" class="btn btn-info">
-                    Borrow
-                </a>
-            </td>
-        </tr>
-    </table>
+    <div th:if="${owner}">
+        <h3 th:if="${(books eq null) or books.empty}">Add your books to the library clicking the button below</h3>
+    </div>
+    <a th:if="${owner}" href="#" th:href="@{/library/add}" class="btn btn-primary">Add Book</a>
+
+    <div th:if="${!(borrowedBooks eq null) and !borrowedBooks.empty}">
+        <h3>Borrowed Books</h3>
+        <table th:if="!${borrowedBooks.empty}" class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tr th:each="book: ${borrowedBooks}">
+                <td th:text="${book.book.title}"></td>
+                <td th:text="${book.book.authorFirstName} + ' ' + ${book.book.authorLastName}"></td>
+                <td>
+                    <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
+                    <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
+                       class="btn btn-info">
+                        Borrow
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${!(lentBooks eq null) and !lentBooks.empty}">
+        <h3>Lent Books</h3>
+        <table th:if="!${lentBooks.empty}" class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tr th:each="book: ${lentBooks}">
+                <td th:text="${book.book.title}"></td>
+                <td th:text="${book.book.authorFirstName} + ' ' + ${book.book.authorLastName}"></td>
+                <td>
+                    <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
+                    <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
+                       class="btn btn-info">
+                        Borrow
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <div th:if="${owner}">
-
-        <a href="#" th:href="@{/library/add}" class="btn btn-primary">Add Book</a>
 
         <h3>Invite another user to your library</h3>
         <div class="row">

@@ -116,6 +116,21 @@ public class LibraryServiceJPA implements LibraryService {
     }
 
     @Override
+    public List<BookData> getNotLentBookDataByOwnerUsername(String username) {
+        return bookDataRepository.findNotLentBooks(username);
+    }
+
+    @Override
+    public List<BookData> getLentBooksByOwnerUsername(String name) {
+        return bookDataRepository.findLentBooks(name);
+    }
+
+    @Override
+    public List<BookData> getBorrowedBooksByOwnerUsername(String name) {
+        return bookDataRepository.findBorrowedBooks(name);
+    }
+
+    @Override
     public Invitation createInvitation(String addedUserEmail, Library library) {
         Invitation invitation = invitationRepository.findByAddedUserEmailAndLibrary(addedUserEmail, library);
         if (invitation == null) {
