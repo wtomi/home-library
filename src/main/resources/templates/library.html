@@ -99,12 +99,17 @@
             <tr>
                 <th>Title</th>
                 <th>Author</th>
+                <th>Owner</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tr th:each="book: ${borrowedBooks}">
                 <td th:text="${book.book.title}"></td>
                 <td th:text="${book.book.authorFirstName} + ' ' + ${book.book.authorLastName}"></td>
+                <td>
+                    <p th:each="rental: ${book.rentals}"
+                       th:text="${rental.ownership.bookData.library.owner.username}"></p>
+                </td>
                 <td>
                     <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
                     <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
@@ -123,12 +128,17 @@
             <tr>
                 <th>Title</th>
                 <th>Author</th>
+                <th>Borrower</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tr th:each="book: ${lentBooks}">
                 <td th:text="${book.book.title}"></td>
                 <td th:text="${book.book.authorFirstName} + ' ' + ${book.book.authorLastName}"></td>
+                <td>
+                    <p th:each="o: ${book.ownerships}" th:if="!${o.currentRental eq null}"
+                       th:text="${o.currentRental.bookData.library.owner.username}"></p>
+                </td>
                 <td>
                     <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
                     <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
