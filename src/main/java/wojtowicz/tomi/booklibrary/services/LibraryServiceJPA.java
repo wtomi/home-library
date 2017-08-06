@@ -146,7 +146,7 @@ public class LibraryServiceJPA implements LibraryService {
 
     @Override
     public List<BookData> searchBooksInLibrary(Integer id, String searchPhrase) {
-        return bookDataRepository.findByLibraryIdAndBookTitleContainingIgnoreCaseOrBookAuthorFirstNameContainingIgnoreCaseOrBookAuthorLastNameContainingIgnoreCase(
-          id, searchPhrase, searchPhrase, searchPhrase);
+        return bookDataRepository.findByLibraryIdAndSearchPhrase(
+          id, searchPhrase);
     }
 }

@@ -8,4 +8,6 @@ public interface BookService extends CRUDService<Book> {
     List<Book> getByAuthorFirstNameAndAuthorLastNameAllIgnoreCase(String firstName, String lastName);
     List<Book> getByTitleIgnoreCase(String title);
     List<Book> getByTitleContainingIgnoreCase(String word);
+    List<Book> searchBooks(String searchPhrase);
+    List<Book> searchBooks(String title, String authorFirstName, String authorLastName);
 }

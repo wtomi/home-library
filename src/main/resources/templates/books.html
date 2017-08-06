@@ -15,8 +15,8 @@
                 <form action="" method="get" class="form-inline">
                     <div class="form-group">
                         <select class="form-control" name="scope">
-                            <option value="library" th:selected="true">This library</option>
-                            <option value="everywhere">Everywhere</option>
+                            <option value="local" th:selected="true">Local System</option>
+                            <option value="external">External System</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -51,8 +51,8 @@
                     </div>
                     <div class="form-group">
                         <select class="form-control" name="scope">
-                            <option value="library" th:selected="true">This library</option>
-                            <option value="everywhere">Everywhere</option>
+                            <option value="local" th:selected="true">Local System</option>
+                            <option value="external">External System</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-info pull-right"><span
@@ -61,10 +61,6 @@
                 </form>
             </div>
         </div>
-    </div>
-
-    <div th:if="${owner}">
-        <h3 th:if="${books.empty}">Add your books to the library clicking the button below</h3>
     </div>
 
     <table th:if="!${books.empty}" class="table">
@@ -79,31 +75,10 @@
             <td th:text="${book.title}"></td>
             <td th:text="${book.authorFirstName} + ' ' + ${book.authorLastName}"></td>
             <td>
-                <a th:if="${owner}" href="#" th:href="${'delete/' + book.id}" class="btn btn-danger">Delete</a>
-                <a href="#" th:href="${'view/' + book.id}" class="btn btn-info">View</a>
-                <a th:if="!${owner}" href="#" th:href="${'borrow/' + book.id}" class="btn btn-info">Borrow</a>
+                <a href="#" th:href="${'/library/add/' + book.id}" class="btn btn-info">Add to the library</a>
             </td>
         </tr>
     </table>
-
-    <div th:if="${owner}">
-
-        <a href="#" th:href="@{/library/add}" class="btn btn-primary">Add Book</a>
-
-        <h3>Invite another user to your library</h3>
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4">
-                <form th:action="@{/library/adduser}" method="post">
-                    <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="User Email"
-                               th:required="true"/>
-                    </div>
-                    <button type="submit" class="btn btn-info">Add Library User</button>
-                </form>
-            </div>
-        </div>
-
-    </div>
 
 </div>
 </body>

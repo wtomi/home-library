@@ -182,4 +182,24 @@ public class LibraryController {
         model.addAttribute("libraries", libraries);
         return "libraries";
     }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/books")
+    public String books(Model model,
+                        @RequestParam(required = false) String search,
+                        @RequestParam(required = false) String title,
+                        @RequestParam(required = false) String authorFirstName,
+                        @RequestParam(required = false) String authorLastName,
+                        @RequestParam(required = false) String scope) {
+        List<Book> books;
+        if (search != null) {
+            books = bookService.searchBooks(search);
+        } else if (title != null) {
+            books = bookService.searchBooks(title, authorFirstName, authorLastName);
+        } else {
+            books = (List<Book>) bookService.listAll();
+        }
+        model.addAttribute("books", books);
+        return "books";
+    }
 }
