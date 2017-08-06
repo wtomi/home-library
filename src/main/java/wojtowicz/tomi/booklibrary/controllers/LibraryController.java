@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class LibraryController {
@@ -231,5 +230,12 @@ public class LibraryController {
             model.addAttribute("libraryId", libraryId);
         } else
             throw new NotFoundException("Not Found");
+    }
+
+    @RequestMapping(value = "/library/view/{bookId}")
+    public String book(Model model, Principal principal, @PathVariable("bookId") Integer bookId) {
+        BookData bookData = libraryService.getBookDataByLibraryOwnerUsernameAndBookId(principal.getName(), bookId);
+        model.addAttribute("book", bookData);
+        return "book";
     }
 }

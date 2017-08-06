@@ -14,6 +14,8 @@ public interface BookDataRepository extends CrudRepository<BookData, Integer> {
 
     BookData findByLibraryIdAndBookId(Integer libraryId, Integer bookId);
 
+    BookData findByLibraryOwnerUsernameAndBookId(String username, Integer id);
+
     List<BookData> findByLibraryOwnerUsername(String username);
 
     List<BookData> findByLibraryIdAndBookTitleContainingIgnoreCaseAndBookAuthorFirstNameContainingIgnoreCaseAndBookAuthorLastNameContainingIgnoreCase(

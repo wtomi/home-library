@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head lang="en">
+    <title>Add Book</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+<div class="container">
+
+    <h3 class="text-info">Book Details</h3>
+    <table class="table">
+        <tr>
+            <td>Title</td>
+            <td th:text="${book.book.title}">Title</td>
+        </tr>
+        <tr>
+            <td>Author</td>
+            <td th:text="${book.book.authorFirstName + ' ' + book.book.authorLastName}">Author</td>
+        </tr>
+    </table>
+
+    <h3 class="text-info">Notes</h3>
+
+    <div th:if="${!(book.ownerships eq null) and !book.ownerships.empty}">
+        <h3 class="text-info">Rental History</h3>
+        <div th:each="ownership,iter: ${book.ownerships}">
+            <h4 th:text="${'Book Copy ' + iter.index}">Book copy</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Start Date</th>
+                    <th>Return Date</th>
+                    <th>Borrower</th>
+                </tr>
+                </thead>
+                <tr th:each="rental: ${ownership.rentals}">
+                    <td th:text="${rental.startDate}">Start Date</td>
+                    <td th:text="${rental.returnDate}">Return Date</td>
+                    <td th:text="${rental.bookData.library.owner.username}">Borrower Name</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

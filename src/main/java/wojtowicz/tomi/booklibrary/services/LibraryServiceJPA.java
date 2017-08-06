@@ -189,6 +189,11 @@ public class LibraryServiceJPA implements LibraryService {
         return rental;
     }
 
+    @Override
+    public BookData getBookDataByLibraryOwnerUsernameAndBookId(String username, Integer bookId) {
+        return bookDataRepository.findByLibraryOwnerUsernameAndBookId(username, bookId);
+    }
+
     private BookData getBookData(Integer borrowerLibraryId, Integer bookId) {
         BookData bookData = bookDataRepository.findByLibraryIdAndBookId(borrowerLibraryId, bookId);
         if (bookData == null)
