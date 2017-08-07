@@ -13,12 +13,12 @@
             <div class="col-xs-0 col-md-6 col-lg-6"></div>
             <div class="col-xs-12 col-md-6 col-lg-6">
                 <form action="" method="get" class="form-inline">
-                    <div class="form-group">
-                        <select class="form-control" name="scope">
-                            <option value="library" th:selected="true">This library</option>
-                            <option value="everywhere">Everywhere</option>
-                        </select>
-                    </div>
+                    <!--<div class="form-group">-->
+                    <!--<select class="form-control" name="scope">-->
+                    <!--<option value="library" th:selected="true">This library</option>-->
+                    <!--<option value="everywhere">Everywhere</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
                     <div class="input-group">
                         <input type="Search" placeholder="Search..." name="search" class="form-control"
                                th:if="${param.search}" th:value="${param.search[0]}"/>
@@ -49,12 +49,12 @@
                     <div class="form-group">
                         <input type="text" name="authorLastName" placeholder="Author's Last Name" class="form-control"/>
                     </div>
-                    <div class="form-group">
-                        <select class="form-control" name="scope">
-                            <option value="library" th:selected="true">This library</option>
-                            <option value="everywhere">Everywhere</option>
-                        </select>
-                    </div>
+                    <!--<div class="form-group">-->
+                    <!--<select class="form-control" name="scope">-->
+                    <!--<option value="library" th:selected="true">This library</option>-->
+                    <!--<option value="everywhere">Everywhere</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
                     <button type="submit" class="btn btn-info pull-right"><span
                             class="glyphicon glyphicon-search"></span>Search
                     </button>
@@ -112,10 +112,6 @@
                 </td>
                 <td>
                     <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
-                    <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
-                       class="btn btn-info">
-                        Borrow
-                    </a>
                 </td>
             </tr>
         </table>
@@ -141,10 +137,6 @@
                 </td>
                 <td>
                     <a href="#" th:href="@{library/view/{book}(book=${book.book.id})}" class="btn btn-info">View</a>
-                    <a th:if="!${owner}" href="#" th:href="@{/borrow(library=${libraryId},book=${book.book.id})}"
-                       class="btn btn-info">
-                        Borrow
-                    </a>
                 </td>
             </tr>
         </table>
