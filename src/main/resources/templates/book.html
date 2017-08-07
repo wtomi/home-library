@@ -21,6 +21,20 @@
     </table>
 
     <h3 class="text-info">Notes</h3>
+    <a href="#" th:href="@{/library/addnote(book=${book.book.id})}" class="btn btn-info">Add Note</a>
+    <table th:if="${!(book.notes eq null) and !book.notes.empty}" class="table">
+        <thead>
+        <tr>
+            <th>Created</th>
+            <th>Note</th>
+        </tr>
+        </thead>
+        <tr th:each="note: ${book.notes}">
+            <td th:text="${note.dateCreated}">Created</td>
+            <td th:text="${note.note}">Note</td>
+        </tr>
+    </table>
+
 
     <div th:if="${!(book.ownerships eq null) and !book.ownerships.empty}">
         <h3 class="text-info">Rental History</h3>

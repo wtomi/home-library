@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import wojtowicz.tomi.booklibrary.adduser.event.OnAddUserSuccess;
 import wojtowicz.tomi.booklibrary.domain.*;
 import wojtowicz.tomi.booklibrary.dto.EmailDto;
+import wojtowicz.tomi.booklibrary.dto.NoteDto;
 import wojtowicz.tomi.booklibrary.dto.RentalDto;
 import wojtowicz.tomi.booklibrary.exceptions.NotFoundException;
 import wojtowicz.tomi.booklibrary.services.BookService;
@@ -237,5 +238,20 @@ public class LibraryController {
         BookData bookData = libraryService.getBookDataByLibraryOwnerUsernameAndBookId(principal.getName(), bookId);
         model.addAttribute("book", bookData);
         return "book";
+    }
+
+    @RequestMapping(value = "library/addnote", method = RequestMethod.GET)
+    public String addNote(Model model, @RequestParam("book") Integer bookId) {
+        model.addAttribute("bookId", bookId);
+        return "addnote";
+    }
+
+    @RequestMapping(value = "library/addnote", method = RequestMethod.POST)
+    public String addNotePost(@Valid NoteDto noteDto, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors())
+            throw new NotFoundException("Not Found");
+        libraryService.addNoteToBookData(principal.getName(), noteDto.getBookId(),
+                noteDto.getNote());
+        return "redirect:/library/view/" + noteDto.getBookId();
     }
 }

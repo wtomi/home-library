@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head lang="en">
+    <title>Add Note</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+<div class="container">
+
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="row">
+            <form th:action="@{/library/addnote}" method="post">
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <textarea class="form-control" id="note" name="note"
+                              placeholder="Note" th:required="true">
+                    </textarea>
+                </div>
+                <input th:hidden="true" type="number" name="bookId" th:value="${bookId}"/>
+                <button type="submit" class="btn btn-primary">Add Note</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

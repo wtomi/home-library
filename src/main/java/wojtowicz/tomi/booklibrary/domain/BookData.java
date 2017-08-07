@@ -32,4 +32,7 @@ public class BookData extends AbstractDomainClass {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookData")
     private List<Rental> rentals;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookData")
+    private List<Note> notes;
 }

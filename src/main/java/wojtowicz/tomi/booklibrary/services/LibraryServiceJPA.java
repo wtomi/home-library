@@ -25,6 +25,8 @@ public class LibraryServiceJPA implements LibraryService {
 
     private RentalRepository rentalRepository;
 
+    private NoteRepository noteRepository;
+
     @Autowired
     public void setLibraryRepository(LibraryRepository libraryRepository) {
         this.libraryRepository = libraryRepository;
@@ -53,6 +55,11 @@ public class LibraryServiceJPA implements LibraryService {
     @Autowired
     public void setRentalRepository(RentalRepository rentalRepository) {
         this.rentalRepository = rentalRepository;
+    }
+
+    @Autowired
+    public void setNoteRepository(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
     }
 
     @Override
@@ -192,6 +199,15 @@ public class LibraryServiceJPA implements LibraryService {
     @Override
     public BookData getBookDataByLibraryOwnerUsernameAndBookId(String username, Integer bookId) {
         return bookDataRepository.findByLibraryOwnerUsernameAndBookId(username, bookId);
+    }
+
+    @Override
+    public Note addNoteToBookData(String name, Integer bookId, String noteText) {
+        BookData bookData = getBookDataByLibraryOwnerUsernameAndBookId(name, bookId);
+        if(bookData == null)
+            throw new NotFoundException("Sorry, We could not found the book");
+        Note note = new Note(noteText, bookData);
+       return noteRepository.save(note);
     }
 
     private BookData getBookData(Integer borrowerLibraryId, Integer bookId) {
